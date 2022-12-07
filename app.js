@@ -30,6 +30,7 @@ let btn_pi = document.getElementById("btn_pi");
 let btn_e = document.getElementById("btn_e");
 let btn_ln = document.getElementById("btn_ln");
 let btn_exp = document.getElementById("btn_exp");
+let output = document.getElementById("output");
 
 /*---------------Botones Onclick de Post------- */
 btn_0.onclick = function () {entrada.value += 0;}
@@ -49,20 +50,20 @@ btn_point.onclick = function(){
 btn_backspace.onclick = function (){entrada.value = entrada.value.slice(0,-1);}
 
 /*--------------Funciones trigonométricas----- */
-btn_sin.onclick = function(){entrada.value += "sin.(";}
-btn_cos.onclick = function(){entrada.value += "cos.(";}
-btn_tan.onclick = function(){entrada.value += "tan.(";}
-btn_arcsin.onclick = function(){entrada.value += "asin(";}
-btn_arccos.onclick = function(){entrada.value += "acos(";}
-btn_arctan.onclick = function(){entrada.value += "atan(";}
+btn_sin.onclick = function(){entrada.value += "sin(";}
+btn_cos.onclick = function(){entrada.value += "cos(";}
+btn_tan.onclick = function(){entrada.value += "tan(";}
+btn_arcsin.onclick = function(){entrada.value += "aSin(";}
+btn_arccos.onclick = function(){entrada.value += "aCos(";}
+btn_arctan.onclick = function(){entrada.value += "aTan(";}
 
 /*----------------Logaritmos---------- */
 btn_ln.onclick = function(){entrada.value += "ln(";}
 
 /*---------------Exponente-------- */
 btn_exp.onclick = function(){
-    /*if (!entrada.value.includes("^"))
-        entrada.value += "^"*/
+    if ((!entrada.value.includes("^")))
+        entrada.value += "^"
 }
 
 /*----------Paréntesis---------- */
@@ -74,7 +75,10 @@ btn_pi.onclick = function(){entrada.value += "π";}
 btn_e.onclick = function(){entrada.value += "e";}
 
 /*---------------RESET----------------- */
-btn_rst.onclick = function() {entrada.value = "";}
+btn_rst.onclick = function() {
+    entrada.value = "";
+    output.innerHTML = "";
+}
 
 /*---------------KEYDOWNS------------------- */
 window.addEventListener("keydown",function(e){
@@ -94,18 +98,23 @@ btn_igual.onclick = function(){
 /*------------función igualdad */
 
 function igual(){
-    if (entrada.value.includes('asin'))
-        entrada.value = entrada.value.replace(/asin/g,'Math.asin');
-    if (entrada.value.includes('acos'))
-        entrada.value = entrada.value.replace(/acos/g,'Math.acos');
-    if (entrada.value.includes('atan'))
-        entrada.value = entrada.value.replace(/atan/g,'Math.atan');
-    if (entrada.value.includes('sin.'))
-        entrada.value = entrada.value.replace(/sin./g,'Math.sin');
-    if (entrada.value.includes('cos.'))
-        entrada.value = entrada.value.replace(/cos./g,'Math.cos');
-    if (entrada.value.includes('tan.'))
-        entrada.value = entrada.value.replace(/tan./g,'Math.tan');
+
+    let valor = entrada.value, valor1;
+
+    if (entrada.value.includes('sin'))
+        entrada.value = entrada.value.replace(/sin/g,'Math.sin');
+    if (entrada.value.includes('cos'))
+        entrada.value = entrada.value.replace(/cos/g,'Math.cos');
+    if (entrada.value.includes('tan'))
+        entrada.value = entrada.value.replace(/tan/g,'Math.tan');
+
+    if (entrada.value.includes('aSin'))
+        entrada.value = entrada.value.replace(/aSin/g,'Math.asin');
+    if (entrada.value.includes('aCos'))
+        entrada.value = entrada.value.replace(/aCos/g,'Math.acos');
+    if (entrada.value.includes('aTan'))
+        entrada.value = entrada.value.replace(/aTan/g,'Math.atan');
+
     if (entrada.value.includes('π'))
         entrada.value = entrada.value.replace(/π/g,'Math.PI');
     if (entrada.value.includes('e'))
@@ -116,14 +125,24 @@ function igual(){
     if (entrada.value.includes('^')){
         let base, exp;
         base = entrada.value.indexOf('^') - 1;
-        base = entrada.value.charAt(base)
+        base = entrada.value.slice(0, base+1);
         exp = entrada.value.indexOf('^') + 1;
-        exp = entrada.value.charAt(exp)
+        exp = entrada.value.slice(exp,entrada.value.length);
         entrada.value = entrada.value.replace(`${base}^${exp}`,`Math.pow(${base},${exp})`);
     }
     
+    valor1 = eval(entrada.value);
+    console.log(valor1);
 
-    entrada.value = eval(entrada.value);
+    
+    if (isNaN(valor1)){
+        output.innerHTML = "Error"
+        entrada.value = entrada.value
+    } else {
+        output.innerHTML = valor1;
+        console.log(isNaN(valor1))
+        entrada.value = valor;
+    }
 }
 
 /*-----------------KeyDowns---------------- */
